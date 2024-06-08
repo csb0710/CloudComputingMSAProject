@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package protobuf;
+
+option go_package = "clcum/protobuf";
+
+// EnrollRequest 메시지 정의
+message EnrollRequest {
+    string student_id = 1;
+    string subj_id = 2;
+    string dvcls_nb = 3;
+}
+
+// EnrollResponse 메시지 정의
+message EnrollResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message Course {
+  string tkcrsEcaOrgnm = 1;
+  int32 grade = 2;
+  string curiCparNm = 3;
+  string subjId = 4;
+  string subjKnm = 5;
+  int32 dvclsNb = 6;
+  string crd = 7;
+  string wkLecrEmpnm = 8;
+  string buldAndRoomCont = 9;
+  string cybCoronaTyNm = 10;
+  int32 enrolledStudents = 11;
+  int32 maxStudents = 12;
+}
+
+message GetCoursesRequest {
+}
+
+message GetCoursesResponse {
+  repeated Course courses = 1;
+}
+
+// EnrollmentService 서비스 정의
+service EnrollmentService {
+    rpc Enroll (EnrollRequest) returns (EnrollResponse);
+    rpc GetCourses (GetCoursesRequest) returns (GetCoursesResponse) {}
+}
