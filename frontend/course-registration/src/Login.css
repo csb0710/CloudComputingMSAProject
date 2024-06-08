@@ -1,0 +1,107 @@
+.main-container {
+	display: flex;
+	justify-content: center;
+	align-items: stretch;
+	min-height: 100vh;
+	background-color: #f0f0f0;
+	padding: 20px;
+  }
+  
+  .login-container, .info-container {
+	flex: 1;
+	margin: 10px;
+  }
+  
+  .login-box, .info-box {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .login-box {
+	background-color: #2c3e50;
+	color: white;
+	padding: 30px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	width: 100%;
+	max-width: 400px;
+  }
+  
+  .login-box h1, .login-box h2 {
+	margin-bottom: 20px;
+  }
+  
+  .login-form {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+  }
+  
+  .input-group {
+	display: flex;
+	width: 100%;
+  }
+  
+  .input-group input {
+	margin-bottom: 10px;
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	width: calc(50% - 5px); /* Adjusting the width to fit two inputs side by side */
+	margin-right: 5px; /* Spacing between inputs */
+  }
+  
+  .input-group input:last-child {
+	margin-right: 0;
+  }
+  
+  .input-group button {
+	padding: 10px;
+	background-color: #e67e22;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 5px; /* Spacing between input and button */
+	height: 100%;
+  }
+  
+  .login-box .links {
+	margin-top: 10px;
+  }
+  
+  .login-box .links a {
+	color: #3498db;
+	text-decoration: none;
+	margin: 0 5px;
+  }
+  
+  .info-box {
+	background-color: white;
+	color: #2c3e50;
+	padding: 30px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	max-width: 400px;
+	text-align: left;
+  }
+  
+  .info-box h3 {
+	color: #e67e22;
+	margin-bottom: 10px;
+  }
+  
+  .info-box p, .info-box ul {
+	font-size: 14px;
+	line-height: 1.5;
+  }
+  
+  .info-box ul {
+	padding-left: 20px;
+  }
+  
