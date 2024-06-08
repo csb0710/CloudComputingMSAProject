@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userbe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userbe
+  template:
+    metadata:
+      labels:
+        app: userbe
+    spec:
+      containers:
+      - name: userbe
+        image: clcum/userbe:v0.1
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 500m
+            memory: "256Mi"
+          requests:
+            cpu: 200m
+            memory: "128Mi"
+        env:
+        - name: SERVER_ADDR
+          value: "userdb-client.default.svc.cluster.local"
+        - name: SERVER_PORT
+          value: "50051"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userbe
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: userbe
+  type: ClusterIP
