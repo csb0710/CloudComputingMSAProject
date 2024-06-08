@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userdb
+spec:
+  selector:
+    matchLabels:
+      app: userdb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: userdb
+    spec:
+      containers:
+      - name: userdb
+        image: mysql:5.7
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "userDB"
+        ports:
+        - containerPort: 3306
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "0.5"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-storage
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userdb-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userdb-client
+  template:
+    metadata:
+      labels:
+        app: userdb-client
+    spec:
+      containers:
+      - name: userdb-client
+        image: clcum-project/userdb-client:v0.1
+        resources:
+          limits:
+            cpu: 500m
+            memory: "256Mi"
+          requests:
+            cpu: 200m
+            memory: "128Mi"
+        env:
+        - name: DB_PASSWORD
+          value: "root"
+        - name: DB_NAME
+          value: "userDB"
+        - name: DB_HOST
+          value: "userdb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userdb
+spec:
+  selector:
+    app: userdb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userdb-client
+spec:
+  ports:
+  - port: 50051
+    targetPort: 50051
+  selector:
+    app: userdb-client
+  type: ClusterIP

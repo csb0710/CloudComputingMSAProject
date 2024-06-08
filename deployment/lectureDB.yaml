@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lecturedb
+spec:
+  selector:
+    matchLabels:
+      app: lecturedb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: lecturedb
+    spec:
+      containers:
+      - name: lecturedb
+        image: mysql:5.7
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "lectureDB"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "0.5"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-storage
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lecturedb-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lecturedb-client
+  template:
+    metadata:
+      labels:
+        app: lecturedb-client
+    spec:
+      containers:
+      - name: lecturedb-client
+        image: clcum-project/lecturedb-client:v0.1
+        ports:
+        - containerPort: 50051
+        resources:
+          limits:
+            cpu: 500m
+            memory: "256Mi"
+          requests:
+            cpu: 200m
+            memory: "128Mi"
+        env:
+        - name: DB_PASSWORD
+          value: "root"
+        - name: DB_NAME
+          value: "lectureDB"
+        - name: DB_HOST
+          value: "lecturedb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lecturedb
+spec:
+  selector:
+    app: lecturedb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lecturedb-client
+spec:
+  ports:
+  - port: 50051
+    targetPort: 50051
+  selector:
+    app: lecturedb-client
+  type: ClusterIP
